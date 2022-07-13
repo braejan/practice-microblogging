@@ -134,7 +134,7 @@ func (microblogPostgres *MicroBlogPostgres) GetPostByID(ID string, internal bool
 }
 
 const (
-	GetAllPostDML = `SELECT id, user_id, text, visit_count FROM "microblog" order by creation_date DESC`
+	GetAllPostDML = `SELECT id, user_id, text FROM "microblog" order by creation_date DESC`
 )
 
 func (microblogPostgres *MicroBlogPostgres) GetAllPosts() (posts []*entities.MicroBlog, err error) {
@@ -148,10 +148,8 @@ func (microblogPostgres *MicroBlogPostgres) GetAllPosts() (posts []*entities.Mic
 	}
 	defer rows.Close()
 	for rows.Next() {
-		post := &entities.MicroBlog{
-			Detail: &entities.MicroBlogTracking{},
-		}
-		err = rows.Scan(&post.ID, &post.UserID, &post.Text, &post.Detail.VisitCount)
+		post := &entities.MicroBlog{}
+		err = rows.Scan(&post.ID, &post.UserID, &post.Text)
 		if err != nil {
 			return nil, err
 		}
@@ -161,7 +159,7 @@ func (microblogPostgres *MicroBlogPostgres) GetAllPosts() (posts []*entities.Mic
 }
 
 const (
-	GetAllPostByUserIDDML = `SELECT m.id, m.user_id, m.text, m.visit_count FROM "microblog" WHERE m.user_id = $1 order by m.creation_date DESC`
+	GetAllPostByUserIDDML = `SELECT id, user_id, text  FROM "microblog" WHERE user_id = $1 order by creation_date DESC`
 )
 
 func (microblogPostgres *MicroBlogPostgres) GetAllPostsByUserID(userID string) (posts []*entities.MicroBlog, err error) {
@@ -174,9 +172,9 @@ func (microblogPostgres *MicroBlogPostgres) GetAllPostsByUserID(userID string) (
 		return
 	}
 	defer rows.Close()
-	if rows.Next() {
+	for rows.Next() {
 		post := &entities.MicroBlog{}
-		err = rows.Scan(&post.ID, &post.UserID, &post.Text, &post.Detail.VisitCount)
+		err = rows.Scan(&post.ID, &post.UserID, &post.Text)
 		if err != nil {
 			return nil, err
 		}
