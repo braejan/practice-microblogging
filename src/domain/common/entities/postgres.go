@@ -3,11 +3,11 @@ package entities
 import "database/sql"
 
 const (
-	Host     string = "localhost"
-	Port     int    = 54321
-	DBName   string = "postgres"
+	Host     string = "postgres-db.cdpc1ksupwh6.us-east-2.rds.amazonaws.com"
+	Port     int    = 5432
+	DBName   string = "postgresdb"
 	DBUser   string = "postgres"
-	DBSecret string = "postgres"
+	DBSecret string = "postgres123"
 )
 
 type Postgres struct {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 
 	commonEntities "github.com/braejan/practice-microblogging/src/domain/common/entities"
 	"github.com/braejan/practice-microblogging/src/domain/common/interfaces"
@@ -34,6 +35,7 @@ const (
 )
 
 func (userPostgres *UserPostgres) CreateUser(userID string, name string) (err error) {
+	log.Println("*********+CreateUser call")
 	if err != nil {
 		return err
 	}
@@ -86,6 +88,7 @@ func (userPostgres *UserPostgres) Open() (DB *sql.DB, err error) {
 		commonEntities.DBSecret,
 		commonEntities.DBName,
 	)
+	log.Printf("***** Opening: %s\n", sqlInfo)
 	DB, err = sql.Open("postgres", sqlInfo)
 	return
 }
